@@ -47,11 +47,11 @@ public class AutoAim extends Command{
    @Override
    public void execute() {
     rotateController.setSetpoint(end);
-    current = swerve.getGyro().getYaw();
+    current = swerve.getGyro().getYaw(); //gets what the current angle is?
     double rotationSpeed = rotateController.calculate(current, end);
     ChassisSpeeds radial = new ChassisSpeeds(0, 0, rotationSpeed);
     SwerveDriveKinematics.desaturateWheelSpeeds(swerve.getModuleStates(), MAX_ROTATE_SPEED * 0.3);
-    swerve.drive(radial, MAX_DRIVE_SPEED); 
+    swerve.drive(radial, MAX_DRIVE_SPEED); //make robot go zoom
    }
 
    // Called once the command ends or is interrupted.

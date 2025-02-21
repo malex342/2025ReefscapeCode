@@ -4,18 +4,15 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.SwerveDrive;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import static frc.robot.Constants.DriveConstants.*;
 
-import java.security.Key;
+import frc.robot.subsystems.SwerveDrive;
+
+import edu.wpi.first.wpilibj2.command.Command;
+
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.controller.PIDController;
 
 public class RotateToAngle extends Command {
 
@@ -40,24 +37,20 @@ public class RotateToAngle extends Command {
 
     rotateController = new PIDController(
      
-      0.045,
-      0.005, 
+      0.000,
+      0.000, 
       0.000
     );
-    
-    rotateController.reset();
-    rotateController.setTolerance(2);
 
-    
+    rotateController.reset();
+    rotateController.setTolerance(1);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
   rotateController.enableContinuousInput(0, 360);
-   
   start = 0;
-
   end = start + angle;
   }
 
@@ -65,25 +58,17 @@ public class RotateToAngle extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     rotateController.setSetpoint(end);
-
     current = swerve.getGyro().getYaw();
-    
     double rotationSpeed = rotateController.calculate(current, end);
-    System.out.println(rotationSpeed);
-
     ChassisSpeeds radial = new ChassisSpeeds(0, 0, rotationSpeed);
-    
     SwerveDriveKinematics.desaturateWheelSpeeds(swerve.getModuleStates(), MAX_ROTATE_SPEED * 0.3);
-   
     swerve.drive(radial, MAX_DRIVE_SPEED); 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  
     swerve.stopModules();
   }
 

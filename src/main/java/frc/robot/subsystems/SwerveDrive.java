@@ -333,5 +333,6 @@ public class SwerveDrive extends SubsystemBase {
   @Override
   public void periodic() {
     swerveOdometry.update(getRotation2d(), getModulePositions());
+    
   }
 }
